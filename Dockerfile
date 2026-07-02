@@ -6,6 +6,10 @@ ENV PIP_NO_CACHE_DIR=1 \
 
 WORKDIR /meilisync
 
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN pip install --upgrade pip poetry
 
 COPY pyproject.toml poetry.lock README.md LICENSE CHANGELOG.md ./

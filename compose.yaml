@@ -1,0 +1,6 @@
+services:
+  meilisync:
+    image: ${MEILISYNC_IMAGE:-ghcr.io/ovlerfork/meilisync:latest}
+    restart: unless-stopped
+    volumes:
+      - ./config.yml:/meilisync/config.yml:ro

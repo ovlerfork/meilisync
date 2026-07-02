@@ -30,7 +30,7 @@ You can use docker to run `meilisync`:
 version: "3"
 services:
   meilisync:
-    image: long2ice/meilisync
+    image: ghcr.io/ovlerfork/meilisync:latest
     volumes:
       - ./config.yml:/meilisync/config.yml
     restart: always

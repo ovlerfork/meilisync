@@ -1,16 +1,23 @@
 name: ci
+
 on:
   push:
-    branches-ignore:
-      - main
+    branches:
+      - "**"
   pull_request:
-    branches-ignore:
-      - main
+
+permissions:
+  contents: read
+
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Validate Docker Compose
+        run: docker compose -f compose.yaml config --quiet
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

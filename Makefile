@@ -7,7 +7,7 @@ style:
 
 check:
 	@black --check $(checkfiles)
-	@ruff $(checkfiles) --fix
+	@ruff check $(checkfiles) --fix
 	@mypy $(checkfiles)
 
 test:

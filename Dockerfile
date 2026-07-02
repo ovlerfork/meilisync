@@ -1,16 +1,26 @@
-FROM python:3.12 as builder
-ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
-RUN mkdir -p /meilisync
+FROM python:3.12-slim AS builder
+
+ENV PIP_NO_CACHE_DIR=1 \
+    POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_CREATE=false
+
 WORKDIR /meilisync
-COPY pyproject.toml poetry.lock /meilisync/
-ENV POETRY_VIRTUALENVS_CREATE false
-RUN pip3 install poetry && poetry install --no-root -E mysql -E postgres
-COPY . /meilisync
-RUN poetry install -E all
+
+RUN pip install --upgrade pip poetry
+
+COPY pyproject.toml poetry.lock README.md LICENSE CHANGELOG.md ./
+RUN poetry install --only main -E all --no-root
+
+COPY meilisync ./meilisync
+RUN poetry install --only main -E all
 
 FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
 WORKDIR /meilisync
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /usr/local/bin/ /usr/local/bin/
+COPY --from=builder /usr/local /usr/local
 COPY --from=builder /meilisync /meilisync
+
 CMD ["meilisync", "start"]

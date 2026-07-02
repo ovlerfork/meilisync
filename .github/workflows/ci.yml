@@ -17,6 +17,13 @@ jobs:
 
       - name: Validate Docker Compose
         run: docker compose -f compose.yaml config --quiet
+        env:
+          MEILISYNC_SOURCE_HOST: mysql
+          MEILISYNC_SOURCE_USER: root
+          MEILISYNC_SOURCE_PASSWORD: secret
+          MEILISYNC_SOURCE_DATABASE: test
+          MEILISEARCH_API_URL: http://meilisearch:7700
+          MEILISYNC_SYNC_TABLE: test
 
       - uses: actions/setup-python@v5
         with:

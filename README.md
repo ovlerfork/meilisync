@@ -27,13 +27,39 @@ Install from pypi:
 You can use docker to run `meilisync`:
 
 ```yaml
-version: "3"
 services:
   meilisync:
     image: ghcr.io/ovlerfork/meilisync:latest
-    volumes:
-      - ./config.yml:/meilisync/config.yml
-    restart: always
+    pull_policy: always
+    restart: unless-stopped
+    configs:
+      - source: meilisync_config
+        target: /meilisync/config.yml
+
+configs:
+  meilisync_config:
+    content: |
+      debug: ${MEILISYNC_DEBUG:-false}
+      plugins: []
+      progress:
+        type: file
+        path: ${MEILISYNC_PROGRESS_PATH:-progress.json}
+      source:
+        type: ${MEILISYNC_SOURCE_TYPE:-mysql}
+        host: "${MEILISYNC_SOURCE_HOST:?set MEILISYNC_SOURCE_HOST}"
+        port: ${MEILISYNC_SOURCE_PORT:-3306}
+        user: "${MEILISYNC_SOURCE_USER:?set MEILISYNC_SOURCE_USER}"
+        password: "${MEILISYNC_SOURCE_PASSWORD:?set MEILISYNC_SOURCE_PASSWORD}"
+        database: "${MEILISYNC_SOURCE_DATABASE:?set MEILISYNC_SOURCE_DATABASE}"
+      meilisearch:
+        api_url: "${MEILISEARCH_API_URL:?set MEILISEARCH_API_URL}"
+        api_key: "${MEILISEARCH_API_KEY:-}"
+        insert_size: ${MEILISYNC_INSERT_SIZE:-1000}
+        insert_interval: ${MEILISYNC_INSERT_INTERVAL:-10}
+      sync:
+        - table: "${MEILISYNC_SYNC_TABLE:?set MEILISYNC_SYNC_TABLE}"
+          pk: "${MEILISYNC_SYNC_PK:-id}"
+          full: ${MEILISYNC_SYNC_FULL:-true}
 ```
 
 ## Prerequisites

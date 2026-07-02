@@ -3,5 +3,10 @@ services:
     image: ${MEILISYNC_IMAGE:-ghcr.io/ovlerfork/meilisync:latest}
     pull_policy: always
     restart: unless-stopped
-    volumes:
-      - ./config.yml:/meilisync/config.yml:ro
+    configs:
+      - source: meilisync_config
+        target: /meilisync/config.yml
+
+configs:
+  meilisync_config:
+    file: ./config.yml

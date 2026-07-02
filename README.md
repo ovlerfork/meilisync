@@ -28,10 +28,24 @@ You can use docker to run `meilisync`:
 
 ```yaml
 services:
+  meilisearch:
+    image: ${MEILISEARCH_IMAGE:-getmeili/meilisearch:v1.24}
+    pull_policy: always
+    restart: unless-stopped
+    environment:
+      MEILI_MASTER_KEY: "${MEILI_MASTER_KEY:?set MEILI_MASTER_KEY}"
+      MEILI_HTTP_ADDR: "0.0.0.0:17702"
+    ports:
+      - "${MEILISEARCH_HTTP_PORT:-17702}:17702"
+    volumes:
+      - meilisearch_data:/meili_data
+
   meilisync:
     image: ghcr.io/ovlerfork/meilisync:latest
     pull_policy: always
     restart: unless-stopped
+    depends_on:
+      - meilisearch
     configs:
       - source: meilisync_config
         target: /meilisync/config.yml
@@ -52,14 +66,17 @@ configs:
         password: "${MEILISYNC_SOURCE_PASSWORD:?set MEILISYNC_SOURCE_PASSWORD}"
         database: "${MEILISYNC_SOURCE_DATABASE:?set MEILISYNC_SOURCE_DATABASE}"
       meilisearch:
-        api_url: "${MEILISEARCH_API_URL:?set MEILISEARCH_API_URL}"
-        api_key: "${MEILISEARCH_API_KEY:-}"
+        api_url: "${MEILISEARCH_API_URL:-http://meilisearch:17702}"
+        api_key: "${MEILI_MASTER_KEY:?set MEILI_MASTER_KEY}"
         insert_size: ${MEILISYNC_INSERT_SIZE:-1000}
         insert_interval: ${MEILISYNC_INSERT_INTERVAL:-10}
       sync:
         - table: "${MEILISYNC_SYNC_TABLE:?set MEILISYNC_SYNC_TABLE}"
           pk: "${MEILISYNC_SYNC_PK:-id}"
           full: ${MEILISYNC_SYNC_FULL:-true}
+
+volumes:
+  meilisearch_data:
 ```
 
 ## Prerequisites

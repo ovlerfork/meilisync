@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from pydantic import BaseModel, Extra
+from pydantic import BaseModel, ConfigDict
 from pydantic_settings import BaseSettings
 
 from meilisync.enums import IndexType, ProgressType, SourceType
@@ -8,11 +8,10 @@ from meilisync.plugin import load_plugin
 
 
 class Source(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     type: SourceType
     database: str
-
-    class Config:
-        extra = Extra.allow
 
 
 class MeiliSearch(BaseModel):
@@ -78,10 +77,9 @@ class Sync(BasePlugin):
 
 
 class Progress(BaseModel):
-    type: ProgressType
+    model_config = ConfigDict(extra="allow")
 
-    class Config:
-        extra = Extra.allow
+    type: ProgressType
 
 
 class Sentry(BaseModel):

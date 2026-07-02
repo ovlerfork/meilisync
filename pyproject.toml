@@ -50,14 +50,14 @@ meilisync = "meilisync.main:app"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.4.1,<3.0.0"]
 
 [tool.isort]
 profile = "black"
 
 [tool.black]
 line-length = 100
-target-version = ['py38', 'py39', 'py310', 'py311']
+target-version = ['py39', 'py310', 'py311', 'py312']
 
 [tool.pytest.ini_options]
 asyncio_mode = 'auto'

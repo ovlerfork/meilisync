@@ -6,7 +6,7 @@ ENV UV_COMPILE_BYTECODE=1 \
 
 WORKDIR /meilisync
 
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+COPY --from=ghcr.io/astral-sh/uv:0.11.26 /uv /uvx /bin/
 
 RUN apt-get update \
     && apt-get install --no-install-recommends -y build-essential \

@@ -1,6 +1,6 @@
 services:
   meilisearch:
-    image: ${MEILISEARCH_IMAGE:-getmeili/meilisearch:v1.24}
+    image: ${MEILISEARCH_IMAGE:-getmeili/meilisearch:v1.48.3}
     pull_policy: always
     restart: unless-stopped
     environment:

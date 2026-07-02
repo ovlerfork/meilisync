@@ -23,7 +23,19 @@ jobs:
           MEILISYNC_SOURCE_USER: root
           MEILISYNC_SOURCE_PASSWORD: secret
           MEILISYNC_SOURCE_DATABASE: test
-          MEILISEARCH_API_URL: http://meilisearch:7700
+          MEILISEARCH_API_URL: http://meilisearch:17702
+          MEILI_MASTER_KEY: test_master_key
+          MEILISYNC_SYNC_TABLE: test
+
+      - name: Pull Meilisearch image
+        run: docker compose -f compose.yaml pull meilisearch
+        env:
+          MEILISYNC_SOURCE_HOST: mysql
+          MEILISYNC_SOURCE_USER: root
+          MEILISYNC_SOURCE_PASSWORD: secret
+          MEILISYNC_SOURCE_DATABASE: test
+          MEILISEARCH_API_URL: http://meilisearch:17702
+          MEILI_MASTER_KEY: test_master_key
           MEILISYNC_SYNC_TABLE: test
 
       - uses: actions/setup-python@v5

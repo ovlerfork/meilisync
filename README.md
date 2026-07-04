@@ -49,6 +49,8 @@ services:
     configs:
       - source: meilisync_config
         target: /meilisync/config.yml
+    volumes:
+      - meilisync_progress:/meilisync/progress
 
 configs:
   meilisync_config:
@@ -57,7 +59,7 @@ configs:
       plugins: []
       progress:
         type: file
-        path: ${MEILISYNC_PROGRESS_PATH:-progress.json}
+        path: ${MEILISYNC_PROGRESS_PATH:-/meilisync/progress/progress.json}
       source:
         type: ${MEILISYNC_SOURCE_TYPE:-mysql}
         host: "${MEILISYNC_SOURCE_HOST:?set MEILISYNC_SOURCE_HOST}"
@@ -77,6 +79,7 @@ configs:
 
 volumes:
   meilisearch_data:
+  meilisync_progress:
 ```
 
 ## Prerequisites

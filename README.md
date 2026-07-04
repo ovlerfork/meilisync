@@ -29,7 +29,7 @@ You can use docker to run `meilisync`:
 ```yaml
 services:
   meilisearch:
-    image: ${MEILISEARCH_IMAGE:-getmeili/meilisearch:v1.24}
+    image: ${MEILISEARCH_IMAGE:-getmeili/meilisearch:v1.48.3}
     pull_policy: always
     restart: unless-stopped
     environment:
@@ -230,6 +230,8 @@ The progress is used to record the last sync position, such as binlog position f
 
 - `type`: `file` or `redis`, if set to file, another option `path` is required.
 - `path`: the file path to store the progress, default is `progress.json`.
+  The Docker Compose example stores it at `/meilisync/progress/progress.json` on the
+  `meilisync_progress` volume.
 - `key`: the redis key to store the progress, default is `meilisync:progress`.
 - `dsn`: the redis dsn, default is `redis://localhost:6379/0`.
 

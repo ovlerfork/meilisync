@@ -16,7 +16,7 @@ def _discover(module: ModuleType, t: Type):
         mod = importlib.import_module(f"{module.__name__}.{m.name}")
         for _, member in inspect.getmembers(mod, inspect.isclass):
             if issubclass(member, t) and member is not t:
-                ret[member.type] = member
+                ret[member.type] = member  # type: ignore[attr-defined]
     return ret
 
 

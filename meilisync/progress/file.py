@@ -18,8 +18,10 @@ class File(Progress):
         self.path = path
 
     async def set(self, **kwargs):
-        async with aiofiles.open(self.path, "w") as f:
+        tmp_path = f"{self.path}.tmp"
+        async with aiofiles.open(tmp_path, "w") as f:
             await f.write(json.dumps(kwargs))
+        await aiofiles.os.replace(tmp_path, self.path)
 
     async def get(self):
         try:
